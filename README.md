@@ -1,12 +1,16 @@
 # Install and use AWS-based Wireguard
-Scripts automate the installation and use of Wireguard on AWS with Ubuntu Server 18.04
+Scripts automate the installation and use of Wireguard on AWS with Ubuntu Server 20.04
+
+This is a fork of [wireguard-aws by isystem-io](https://github.com/isystem-io/wireguard-aws) repository with cumulative changes from several other forks.
+
 
 ## How use
 
 ### Installation
 ```
-git clone https://github.com/pprometey/wireguard_aws.git wireguard_aws
+git clone https://github.com/ba1dr/wireguard-aws.git wireguard_aws
 cd wireguard_aws
+chmod +x initial.sh install.sh add-client.sh
 sudo ./initial.sh
 ```
 
@@ -31,6 +35,7 @@ sudo ./reset.sh
 ```
 sudo ./remove.sh
 ```
-## Contributors  (alphabetically)
+## Contributors
 - [Alexey Chernyavskiy](https://github.com/alexey-chernyavskiy)
 - [Max Kovgan](https://github.com/mvk)
+- [Alexey Kolyanov](https://github.com/ba1dr)

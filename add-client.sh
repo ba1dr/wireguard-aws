@@ -20,7 +20,7 @@ read VPN_SUBNET < ./vpn_subnet.var
 PRESHARED_KEY="_preshared.key"
 PRIV_KEY="_private.key"
 PUB_KEY="_public.key"
-ALLOWED_IP="0.0.0.0/0"
+read ALLOWED_IP < ./allowed_ip.var
 
 # Go to the wireguard directory and create a directory structure in which we will store client configuration files
 mkdir -p ./clients
@@ -33,9 +33,9 @@ CLIENT_PRESHARED_KEY=$( wg genpsk )
 CLIENT_PRIVKEY=$( wg genkey )
 CLIENT_PUBLIC_KEY=$( echo $CLIENT_PRIVKEY | wg pubkey )
 
-#echo $CLIENT_PRESHARED_KEY > ./"$USERNAME$PRESHARED_KEY"
-#echo $CLIENT_PRIVKEY > ./"$USERNAME$PRIV_KEY"
-#echo $CLIENT_PUBLIC_KEY > ./"$USERNAME$PUB_KEY"
+echo $CLIENT_PRESHARED_KEY > ./"$USERNAME$PRESHARED_KEY"
+echo $CLIENT_PRIVKEY > ./"$USERNAME$PRIV_KEY"
+echo $CLIENT_PUBLIC_KEY > ./"$USERNAME$PUB_KEY"
 
 read SERVER_PUBLIC_KEY < /etc/wireguard/server_public.key
 
@@ -52,9 +52,10 @@ cat > /etc/wireguard/clients/$USERNAME/$USERNAME.conf << EOF
 PrivateKey = $CLIENT_PRIVKEY
 Address = $CLIENT_IP
 DNS = $DNS
-
+# MTU = 1420
 
 [Peer]
+# $USERNAME
 PublicKey = $SERVER_PUBLIC_KEY
 PresharedKey = $CLIENT_PRESHARED_KEY
 AllowedIPs = $ALLOWED_IP
@@ -66,6 +67,7 @@ EOF
 cat >> /etc/wireguard/wg0.conf << EOF
 
 [Peer]
+# $USERNAME
 PublicKey = $CLIENT_PUBLIC_KEY
 PresharedKey = $CLIENT_PRESHARED_KEY
 AllowedIPs = $CLIENT_IP
@@ -83,4 +85,4 @@ echo "# Display $USERNAME.conf"
 cat ./$USERNAME.conf
 
 # Save QR config to png file
-#qrencode -t png -o ./$USERNAME.png < ./$USERNAME.conf
+qrencode -t png -o ./$USERNAME.png < ./$USERNAME.conf
